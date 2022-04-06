@@ -120,7 +120,7 @@ def handle_client(conn, addr, serverSocket, serverPort, tablero):
                 res=insertar(int(input1),int(input2),0,tablero,jugadas)
                 if res=="Jugada invalida,No puede poner el elemento alli" or res=="Posicion fuera de rango":
                     print("Jugada invalida reintentelo")
-                    conn.send("Jugada invalida, juegas denuevo.".encode())
+                    conn.send("Jugada invalida, juegas denuevo.\n".encode())
                     enviar_tablero(conn,tablero)
                     continue #no deja jugar al servidor gato
                     #ENVIAR MSG A "a.py" para que vuelva a ingresar un valor... No dejar q el bot juegue LISTO
@@ -155,6 +155,7 @@ def handle_client(conn, addr, serverSocket, serverPort, tablero):
                     if verificar_estado(tablero)[0]!="neutral":
                         if verificar_estado(tablero)[1]=="O":
                             print("Lamentablemente has perdido contra el BOT")
+                            tablero = [[' ', ' ', ' '],[ ' ', ' ', ' '], [' ', ' ', ' ']] 
                             evento_especial_2 = 2
                             #TODO: decirle al servidor gato que reinicie su propio tablero y que no juege LISTO
                     #--------------------
@@ -168,6 +169,8 @@ def handle_client(conn, addr, serverSocket, serverPort, tablero):
                     final = "¡Felicidades, has ganado!"*(evento_especial_1) + "Lamentablemente has perdido contra el BOT"*(evento_especial_2)
                     conn.send(final.encode())
                     protocolo_reinicio_juego(serverSocket,tablero,menu_inicio,evento_especial_1,evento_especial_2)
+                    evento_especial_1 = False
+                    evento_especial_2 = False
                     menu_inicio = True
 
                 #conn.send(END_OF_RESPONSE.encode())#ultimo mensaje que se manda al cliente en cada iteracion
