@@ -32,7 +32,7 @@ def listen(clientSocket):
 listen(clientSocket)
 while True:
     mensaje = input("mensaje: ")
-    if mensaje  == DISCONNECT_MESSAGE or mensaje == "2": #algo no funciona....
+    if mensaje  == DISCONNECT_MESSAGE or mensaje == "2": 
         send(mensaje)
         print(clientSocket.recv(2048).decode())
 
@@ -40,66 +40,4 @@ while True:
     send(mensaje)
     listen(clientSocket)
 
-    #print(clientSocket.recv(2048).decode())
-    #print(clientSocket.recv(2048).decode())
-    
-
-    
-
-
-
-
-
-
-"""
-    while True:
-        try:
-            print(clientSocket.recv(2048).decode())
-        except TimeoutError:
-            break
-
-
-
-
-    flag = True
-    while flag:
-        print("estoy intentando recibir...")
-        respuesta = clientSocket.recv(2048).decode()
-        if respuesta.strip() == END_OF_RESPONSE:
-            print("WTF")
-            flag = False
-        else:
-            print(respuesta)
-
-
-
-
-    n_respuestas = int(clientSocket.recv(2048).decode())
-    print(f"numero de mensajes proximos: {n_respuestas} ")
-    for i in range(n_respuestas):
-        print("estoy intentando recibir...")
-        print(clientSocket.recv(2048).decode())
-        """
-
-    
-    
-
-
-
-
-
-
-
-
-"""
-while True:
-    
-
-    toSend = input('Mensaje: ')
-    clientSocket.send(toSend.encode())
-
-    response = clientSocket.recv(1024).decode()
-    print("respuesta del servidor", response)
-
-clientSocket.close() 
-"""
+ 

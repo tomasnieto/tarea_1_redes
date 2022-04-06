@@ -12,6 +12,7 @@ import (
 func main() {
 
 	DISCONNECT_MESSAGE := "DISCONNECT"
+	REQUEST := "disponible"
 	BOARD_CLEAR := "reinicio"
 
 	//semilla para la aleatoriedad
@@ -63,6 +64,17 @@ func main() {
 			}
 			continue
 		}
+
+		if msg == REQUEST { //servidor gato responde si está disponible
+			probabilidad := r1.Intn(10)
+			if probabilidad == 10 {
+				_, _ = connection.WriteToUDP([]byte("1"), addr)
+			} else {
+				_, _ = connection.WriteToUDP([]byte("0"), addr)
+			}
+			continue
+
+		}
 		//move = str(msg).strip().split(",")
 		//input1,input2 = move
 		//actualizar tablero local
@@ -85,19 +97,6 @@ func main() {
 			}
 		}
 
-		/*
-			for i := 0; i < 3; i++ {
-				for j := 0; j < 3; j++ {
-					a := i
-					b := j
-					if tablero[i][j] == " " {
-						argumento = fmt.Sprintf("%d,%d", a, b)
-						tablero[a][b] = "O"
-
-						break
-					}
-				}
-			}*/
 		fmt.Print("jugada del bot: ")
 		fmt.Print(argumento)
 		fmt.Print("\n")
