@@ -178,13 +178,13 @@ def handle_client(conn, addr, serverSocket, serverPort, tablero):
                     jugadas += 1
                     if jugadas == 9:#empate
                         evento_especial_3 = True
-                        
+
                     if verificar_estado(tablero)[0]!="neutral":
                         if verificar_estado(tablero)[1]=="O":
                             enviar_tablero(conn,tablero)
                             print("Lamentablemente has perdido contra el BOT")
                             #tablero = [[' ', ' ', ' '],[ ' ', ' ', ' '], [' ', ' ', ' ']] 
-                            evento_especial_2 = 2
+                            evento_especial_2 = True
                             #TODO: decirle al servidor gato que reinicie su propio tablero y que no juege LISTO
                     #--------------------
                 
