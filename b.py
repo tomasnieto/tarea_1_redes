@@ -3,7 +3,7 @@ import socket as skt
 from time import sleep
 from juego import insertar, ver_tablero, verificar_estado
 
-jugadas = 0
+
 tablero = [[' ', ' ', ' '],[ ' ', ' ', ' '], [' ', ' ', ' ']]
 
 MENSAJES_POR_ENVIAR = "2"
@@ -72,9 +72,11 @@ def protocolo_reinicio_juego(serverSocket,tablero,menu_inicio,evento_especial_1,
 def handle_client(conn, addr, serverSocket, serverPort, tablero):
     
     connected = True
-    evento_especial_1 = False
-    evento_especial_2 = False 
+    evento_especial_1 = False #gana el cliente
+    evento_especial_2 = False #gana el bot
+    evento_especial_3 = False #empate entre cliente y bot
     menu_inicio = True
+    jugadas = 0
     while connected:
        
         if menu_inicio:
@@ -96,10 +98,10 @@ def handle_client(conn, addr, serverSocket, serverPort, tablero):
                 msg_aux = int(msg.decode())
                 if msg_aux == 1:#no esta disponible
                     print("servidor gato no disponible")
-                    conn.send("servidor gato no disponible por el momento... intente denuevo".encode())
+                    conn.send("servidor gato no disponible por el momento... intente denuevo\n".encode())
                     continue
                 print("servidor gato disponible")
-                conn.send("servidor gato disponible para jugar".encode())
+                conn.send("servidor gato disponible para jugar\n".encode())
                 #-------------------------
                 enviar_tablero(conn,tablero)
                 menu_inicio = False
@@ -143,6 +145,9 @@ def handle_client(conn, addr, serverSocket, serverPort, tablero):
                     #ENVIAR MSG A "a.py" para que vuelva a ingresar un valor... No dejar q el bot juegue LISTO
                 else:
                     print(res)
+                    jugadas += 1
+                    if jugadas == 9:#empate
+                        evento_especial_3 = True
                 #TODO: variable "jugadas" no se actualiza con insertar() por algun motivo
                 
                 
@@ -156,7 +161,7 @@ def handle_client(conn, addr, serverSocket, serverPort, tablero):
                         #TODO: arreglar, tablero se ve sobreescrito por el bot despues de reiniciar LISTO
                 #------------------------
 
-                if not evento_especial_1:
+                if (not evento_especial_1) and (not evento_especial_3):
                     serverSocket.sendto(msg.encode(), (address, serverPort))
                     print("esperando jugada del servidor")
 
@@ -170,6 +175,7 @@ def handle_client(conn, addr, serverSocket, serverPort, tablero):
                     move = str(msg_aux).strip().split(",")
                     input1,input2 = move
                     print(insertar(int(input1),int(input2),1,tablero,jugadas))
+                    jugadas += 1
                     if verificar_estado(tablero)[0]!="neutral":
                         if verificar_estado(tablero)[1]=="O":
                             enviar_tablero(conn,tablero)
@@ -189,9 +195,24 @@ def handle_client(conn, addr, serverSocket, serverPort, tablero):
                     final = "¡Felicidades, has ganado!"*(evento_especial_1) + "Lamentablemente has perdido contra el BOT"*(evento_especial_2)
                     conn.send(final.encode())
                     protocolo_reinicio_juego(serverSocket,tablero,menu_inicio,evento_especial_1,evento_especial_2)
+                    tablero = [[' ', ' ', ' '],[ ' ', ' ', ' '], [' ', ' ', ' ']]
                     evento_especial_1 = False
                     evento_especial_2 = False
+                    evento_especial_3 = False
                     menu_inicio = True
+                    jugadas = 0
+
+                elif evento_especial_3:
+                    final = "empate, nadie gana!"
+                    conn.send(final.encode())
+                    protocolo_reinicio_juego(serverSocket,tablero,menu_inicio,evento_especial_1,evento_especial_2)
+                    tablero = [[' ', ' ', ' '],[ ' ', ' ', ' '], [' ', ' ', ' ']]
+                    evento_especial_1 = False
+                    evento_especial_2 = False
+                    evento_especial_3 = False
+                    menu_inicio = True
+                    jugadas = 0
+                    
                 else:
                     enviar_tablero(conn,tablero) #siete envios
 

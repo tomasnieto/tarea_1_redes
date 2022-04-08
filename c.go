@@ -67,7 +67,7 @@ func main() {
 
 		if msg == REQUEST { //servidor gato responde si está disponible
 			probabilidad := r1.Intn(10)
-			if probabilidad == 10 {
+			if probabilidad == 9 {
 				_, _ = connection.WriteToUDP([]byte("1"), addr)
 			} else {
 				_, _ = connection.WriteToUDP([]byte("0"), addr)
