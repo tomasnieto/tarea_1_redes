@@ -176,6 +176,9 @@ def handle_client(conn, addr, serverSocket, serverPort, tablero):
                     input1,input2 = move
                     print(insertar(int(input1),int(input2),1,tablero,jugadas))
                     jugadas += 1
+                    if jugadas == 9:#empate
+                        evento_especial_3 = True
+
                     if verificar_estado(tablero)[0]!="neutral":
                         if verificar_estado(tablero)[1]=="O":
                             enviar_tablero(conn,tablero)
