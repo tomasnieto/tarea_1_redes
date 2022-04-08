@@ -181,7 +181,7 @@ def handle_client(conn, addr, serverSocket, serverPort, tablero):
                             enviar_tablero(conn,tablero)
                             print("Lamentablemente has perdido contra el BOT")
                             #tablero = [[' ', ' ', ' '],[ ' ', ' ', ' '], [' ', ' ', ' ']] 
-                            evento_especial_2 = 2
+                            evento_especial_2 = True
                             #TODO: decirle al servidor gato que reinicie su propio tablero y que no juege LISTO
                     #--------------------
                 
@@ -192,7 +192,7 @@ def handle_client(conn, addr, serverSocket, serverPort, tablero):
                 #conn.send(msg)
                 if evento_especial_1 or evento_especial_2:
                     
-                    final = "¡Felicidades, has ganado!"*(evento_especial_1) + "Lamentablemente has perdido contra el BOT"*(evento_especial_2)
+                    final = "¡Felicidades, has ganado!\n"*(evento_especial_1) + "Lamentablemente has perdido contra el BOT\n"*(evento_especial_2)
                     conn.send(final.encode())
                     protocolo_reinicio_juego(serverSocket,tablero,menu_inicio,evento_especial_1,evento_especial_2)
                     tablero = [[' ', ' ', ' '],[ ' ', ' ', ' '], [' ', ' ', ' ']]
@@ -232,4 +232,3 @@ def start():
     return
 
 start()
-
