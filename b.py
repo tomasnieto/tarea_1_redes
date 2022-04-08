@@ -62,7 +62,7 @@ def enviar_tablero(conn,tablero):
 
 
 def handle_evento_especial(e_e_1, e_e_2, e_e_3, conn, serverSocket, tablero, menu_inicio, jugadas):
-    print("handle envento especial")
+    #print("handle envento especial")
     final = "¡Felicidades, has ganado!"*(e_e_1) + "Lamentablemente has perdido contra el BOT"*(e_e_2) + "empate, nadie gana!"*(e_e_3)
     conn.send(final.encode())
     serverSocket.sendto(BOARD_CLEAR.encode(), (address, serverPort))
@@ -99,7 +99,7 @@ def handle_client(conn, addr, serverSocket, serverPort, tablero):
                 serverSocket.close()
                 return
             elif int(respuesta_menu) == 1:#cliente quiere jugar
-                print("opcion para jugar")
+                #print("opcion para jugar")
                 print("accediendo disponibilidad del servidor gato...")
                 #preguntar al servidor gato si esta disponible
                 serverSocket.sendto(REQUEST.encode(), (address, serverPort))
@@ -116,11 +116,11 @@ def handle_client(conn, addr, serverSocket, serverPort, tablero):
                 menu_inicio = False #juego empieza
                 continue
             else:
-                print("opcion invalida")
+                #print("opcion invalida")
                 conn.send("Opcion invalida, ingrese denuevo".encode())
 
         else:
-            print("juego en marcha")
+            #print("juego en marcha")
             #recibir input del cliente
             conn.send("Ingrese coordenadas, separadas con ',': ".encode())
             msg_length = conn.recv(HEADER).decode()
@@ -149,7 +149,7 @@ def handle_client(conn, addr, serverSocket, serverPort, tablero):
                 #jugar la jugada en el tablero
                 res=insertar(int(input1),int(input2),0,tablero,jugadas)
                 if res=="Jugada invalida,No puede poner el elemento alli" or res=="Posicion fuera de rango":
-                    print("Jugada invalida reintentelo")
+                    #print("Jugada invalida reintentelo")
                     conn.send("Jugada invalida, juegas denuevo.\n".encode())
                     enviar_tablero(conn,tablero)
                     continue #no deja jugar al servidor gato
@@ -163,7 +163,7 @@ def handle_client(conn, addr, serverSocket, serverPort, tablero):
 
                 if verificar_estado(tablero)[0]!="neutral":
                     if verificar_estado(tablero)[1]=="X":
-                        print("¡Felicidades, has ganado!") #cliente gana
+                        print("cliente gana")
                         evento_especial_1 = True
                         evento_especial_3 = False
                         enviar_tablero(conn,tablero)
@@ -191,7 +191,7 @@ def handle_client(conn, addr, serverSocket, serverPort, tablero):
                     if verificar_estado(tablero)[0]!="neutral":
                         if verificar_estado(tablero)[1]=="O":
                             enviar_tablero(conn,tablero)
-                            print("Lamentablemente has perdido contra el BOT")#cliente pierde
+                            print("cliente pierde")
                             evento_especial_2 = True
                     #--------------------
 

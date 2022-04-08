@@ -25,7 +25,7 @@ def insertar(posX,posY,jugador,tablero,jugadas): #jugador=0: cliente; jugador=1:
         """
         tablero[posX][posY]="X"*(jugador==0) + "O"*(jugador==1) 
         #jugadas+=1
-        ver_tablero(tablero)
+        #ver_tablero(tablero)
         return(f"\njugadas: {jugadas} \n")#jugada valida
     else:
         return("Jugada invalida,No puede poner el elemento alli")#jugada invalida
